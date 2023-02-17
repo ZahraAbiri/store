@@ -1,0 +1,58 @@
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <title>Title</title>#}
+{#</head>#}
+{#<body>#}
+{#<div class="main">#}
+{##}
+{#    {% for data in dataset %}.#}
+{##}
+{#    {{ data.name }}<br/>#}
+{#    {{ data.price }}<br/>#}
+{#    {{ data.category }}<br/>#}
+{##}
+{#    <hr/>#}
+{##}
+{#    {% endfor %}#}
+{##}
+{#</div>#}
+{#</body>#}
+{#</html>#}
+
+{% extends "base.html" %}
+{% block content %}
+<div class="card-body">
+    <h4>discount List</h4>
+    <table class="table">
+        <thead>
+            <tr>
+{#                <th scope="col">category</th>#}
+                <th scope="col">code</th>
+                <th scope="col">valid_from</th>
+                <th scope="col">valid_to</th>
+                <th scope="col">discount</th>
+                <th scope="col">active</th>
+{#                <th scope="col">available</th>#}
+            </tr>
+        </thead>
+        <tbody>
+            {% for dis in discount %}
+            <tr>
+{#                <td>{{ product.category.name }}</td>#}
+                <td>{{ dis.code }}</td>
+                <td>{{ dis.valid_from }}</td>
+                <td>{{ dis.valid_to }}</td>
+                <td>{{ dis.discount }}</td>
+                <td>{{ dis.active }}</td>
+                <td><a type="button" class="btn btn-warning" href="/discountupdate/{{ dis.id }}">Update</a>
+                    <a type="button" class="btn btn-danger" href="/discountdelete/{{ dis.id }}">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a type="button" class="btn btn-success" href="{% url 'products:discountcreate' %}">Create</a>
+</div>
+{% endblock %}

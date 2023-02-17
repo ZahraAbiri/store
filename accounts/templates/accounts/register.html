@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <head>
+        <link href="../../static/css/login.css" rel="stylesheet">
+        <script src="../../static/js/script.js"></script>
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
+    <body>
+    <div >
+
+        <p class="signup_word">SIGN UP</p>
+        <form method="post" action="" id="signUp">
+             {% csrf_token %}
+            {{ form.as_p }}
+{#            <input type="text" name="phone_number" placeholder="first name" class="f1" maxlength="10" required#}
+{#                   style="margin-top:35px;" autocomplete="off" value="{ form.phone_number }">#}
+{#            <input type="text" name="last_name" placeholder="last name" class="f1" maxlength="10" required#}
+{#                   autocomplete="off">#}
+{#            <input type="text" name="username" placeholder="username" class="f1" maxlength="10" required#}
+{#                   autocomplete="off">#}
+{#            <input type="email" name="email" placeholder="e-mail" class="f1" maxlength="30" required autocomplete="off">#}
+{#            <input type="password" name="password" placeholder="password" class="f1" maxlength="10" required#}
+{#                   autocomplete="off">#}
+            <button class="f1" name="signup" value="clicked">Sign up</button>
+        </form>
+    </div>
+    {% endblock %}
+    </body>
+
+</html>
