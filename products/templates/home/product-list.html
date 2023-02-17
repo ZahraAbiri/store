@@ -1,0 +1,58 @@
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <title>Title</title>#}
+{#</head>#}
+{#<body>#}
+{#<div class="main">#}
+{##}
+{#    {% for data in dataset %}.#}
+{##}
+{#    {{ data.name }}<br/>#}
+{#    {{ data.price }}<br/>#}
+{#    {{ data.category }}<br/>#}
+{##}
+{#    <hr/>#}
+{##}
+{#    {% endfor %}#}
+{##}
+{#</div>#}
+{#</body>#}
+{#</html>#}
+
+{% extends "base.html" %}
+{% block content %}
+<div class="card-body">
+    <h4>product List</h4>
+    <table class="table">
+        <thead>
+            <tr>
+{#                <th scope="col">category</th>#}
+                <th scope="col">name</th>
+{#                <th scope="col">Slug</th>#}
+{#                <th scope="col">image</th>#}
+{#                <th scope="col">description</th>#}
+                <th scope="col">price</th>
+                <th scope="col">available</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+{#                <td>{{ product.category.name }}</td>#}
+                <td>{{ product.name }}</td>
+{#                <td>{{ product.Slug }}</td>#}
+{#                <td>{{ product.description }}</td>#}
+                <td>{{ product.price }}</td>
+                <td>{{ product.available }}</td>
+                <td><a type="button" class="btn btn-warning" href="/productupdate/{{ product.id }}">Update</a>
+                    <a type="button" class="btn btn-danger" href="/productdelete/{{ product.id }}">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a type="button" class="btn btn-success" href="{% url 'products:productcreate' %}">Create</a>
+</div>
+{% endblock %}
