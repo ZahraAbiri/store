@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="card-body">
+
+        <div class="card" style="width: 93rem;">
+            <div class="card-header">
+                user list
+            </div>
+            <ul class="list-group list-group-flush">
+                {% for u in user %}
+                    <li class="list-group-item">full_name : {{ u.full_name }} &nbsp;&nbsp; email : {{ u.email }} &nbsp;&nbsp; phone : {{ u.phone_number }} </li>
+
+                {% endfor %}
+
+            </ul>
+        </div>
+        <div class="card" style="width: 93rem;">
+            <div class="card-header">
+                order list
+            </div>
+            <ul class="list-group list-group-flush">
+                {% for u in order %}
+                    <li class="list-group-item">paid : {{ u.paid }} &nbsp;&nbsp; created : {{ u.created }} &nbsp;&nbsp; sent_status : {{ u.sent_status }} </li>
+
+                {% endfor %}
+
+            </ul>
+        </div>
+        <div class="card" style="width: 93rem;">
+            <div class="card-header">
+                product list
+            </div>
+            <ul class="list-group list-group-flush">
+                {% for u in product %}
+                    <li class="list-group-item">name : {{ u.name }} &nbsp;&nbsp; available : {{ u.available }} &nbsp;&nbsp; price : {{ u.price }} </li>
+
+                {% endfor %}
+
+            </ul>
+        </div>
+        <div class="card" style="width: 93rem;">
+            <div class="card-header">
+                category list
+            </div>
+            <ul class="list-group list-group-flush">
+                {% for u in category %}
+                    <li class="list-group-item"> name : {{ u.name }} </li>
+                {% endfor %}
+
+            </ul>
+        </div>
+        <div class="card" style="width: 93rem;">
+            <div class="card-header">
+                address list
+            </div>
+            <ul class="list-group list-group-flush">
+                {% for u in address %}
+                    <li class="list-group-item"> city : {{ u.city }}&nbsp;&nbsp; avenue : {{ u.avenue }}&nbsp;&nbsp; street : {{ u.street }} &nbsp;&nbsp;plate : {{ u.plate }} &nbsp;&nbsp;zipCode : {{ u.zipCode }} </li>
+                {% endfor %}
+
+            </ul>
+        </div>
+        <div class="card" style="width: 93rem;">
+            <div class="card-header">
+                discount list
+            </div>
+            <ul class="list-group list-group-flush">
+                {% for u in discount %}
+                    <li class="list-group-item"> code : {{ u.code }} &nbsp;&nbsp;valid_from : {{ u.valid_from }}&nbsp;&nbsp;valid_to : {{ u.valid_to }}&nbsp;&nbsp;discount : {{ u.discount }}&nbsp;&nbsp;active : {{ u.active }} </li>
+                {% endfor %}
+
+            </ul>
+        </div>
+
+
+        {#    <table class="table">#}
+        {#        <thead>#}
+        {#            <tr>#}
+        {#                <th scope="col">category</th>#}
+        {#                <th scope="col">city_name</th>#}
+        {#                <th scope="col">avenue_name</th>#}
+        {#                <th scope="col">street_name</th>#}
+        {#                <th scope="col">zipCode</th>#}
+        {#                <th scope="col">active</th>#}
+        {#                <th scope="col">available</th>#}
+        {#            </tr>#}
+        {#        </thead>#}
+        {#        <tbody>#}
+        {#            {% for dis in address %}#}
+        {#            <tr>#}
+        {#                <td>{{ product.category.name }}</td>#}
+        {#                <td>{{ dis.city_name }}</td>#}
+        {#                <td>{{ dis.avenue_name }}</td>#}
+        {#                <td>{{ dis.street_name }}</td>#}
+        {#                <td>{{ dis.zipCode }}</td>#}
+        {#                <td>{{ dis.active }}</td>#}
+        {#                <td><a type="button" class="btn btn-warning" href="/addressupdate/{{ dis.id }}">Update</a>#}
+        {#                    <a type="button" class="btn btn-danger" href="/addressdelete/{{ dis.id }}">Delete</a>#}
+        {#                </td>#}
+        {#            </tr>#}
+        {#            {% endfor %}#}
+        {#        </tbody>#}
+        {#    </table>#}
+        {#    <a type="button" class="btn btn-success" href="{% url 'accounts:addresscreate' %}">Create</a>#}
+    </div>
+{% endblock %}

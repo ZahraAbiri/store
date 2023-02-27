@@ -24,11 +24,11 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="card-body">
-    <h4>Update Product</h4>
+    <h4>Update address</h4>
     <form method="post">
         {% csrf_token %}
         {{form.as_p}}
-        <a type="button" class="btn btn-danger" href="{% url 'accounts:addresslist' %}">Cancel</a>
+        <a type="button" class="btn btn-danger" href="{% url 'accounts:addressListManagement' %}">Cancel</a>
         <button type="submit" class="btn btn-success">Update</button>
     </form>
 </div>

@@ -65,6 +65,32 @@ class UserRegistrationForm(forms.Form):
             raise ValidationError('This phone number already exists')
         # OtpCode.objects.filter(phone_number=phone).delete()
         return phone
+class User_RegistrationForm(forms.Form):
+
+    email = forms.EmailField(widget=forms.TextInput({'class': 'f1', 'placeholder': 'Enter email *'}), label=False)
+    full_name = forms.CharField(widget=forms.TextInput({'class': 'f1', 'placeholder': 'Enter fullname *'}), label=False)
+    phone = forms.CharField(widget=forms.TextInput({'class': 'f1', 'placeholder': 'Enter phone number *'}), label=False)
+    password = forms.CharField(widget=forms.PasswordInput({'class': 'f1', 'placeholder': 'Enter password *'}),
+                               label=False, )
+    is_admin = forms.NullBooleanField()
+    is_nazer = forms.NullBooleanField()
+    is_operator = forms.NullBooleanField()
+    is_customer = forms.NullBooleanField()
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        user = User.objects.filter(email=email).exists()
+        if user:
+            raise ValidationError('This email already exists')
+        return email
+
+    def clean_phone(self):
+        phone = self.cleaned_data['phone']
+        user = User.objects.filter(phone_number=phone).exists()
+        if user:
+            raise ValidationError('This phone number already exists')
+        # OtpCode.objects.filter(phone_number=phone).delete()
+        return phone
 
 
 class VerifyCodeForm(forms.Form):
@@ -80,10 +106,11 @@ class addAddressForm(forms.ModelForm):
         model = Address
         fields ='__all__'
 class updateUserForm(forms.ModelForm):
-    email = forms.EmailField(widget=forms.TextInput({'class': 'f1', 'placeholder': 'Enter email *'}))
-    full_name = forms.CharField(widget=forms.TextInput({'class': 'f1', 'placeholder': 'Enter fullname *'}))
-    phone = forms.CharField(widget=forms.TextInput({'class': 'f1', 'placeholder': 'Enter phone number *'}))
-    password = forms.CharField(widget=forms.PasswordInput({'class': 'f1', 'placeholder': 'Enter password *'})
+
+    email = forms.EmailField(widget=forms.TextInput({'class': 'form-control', 'placeholder': 'Enter email *'}))
+    full_name = forms.CharField(widget=forms.TextInput({'class': 'form-control', 'placeholder': 'Enter fullname *'}))
+    phone = forms.CharField(widget=forms.TextInput({'class': 'form-control', 'placeholder': 'Enter phone number *'}))
+    password = forms.CharField(widget=forms.PasswordInput({'class': 'form-control', 'placeholder': 'Enter password *'})
                                )
 
     class Meta:

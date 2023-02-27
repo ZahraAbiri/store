@@ -46,8 +46,8 @@
                 <td>{{ dis.street_name }}</td>
                 <td>{{ dis.zipCode }}</td>
 {#                <td>{{ dis.active }}</td>#}
-                <td><a type="button" class="btn btn-warning" href="/addressupdate/{{ dis.id }}">Update</a>
-                    <a type="button" class="btn btn-danger" href="/addressdelete/{{ dis.id }}">Delete</a>
+                <td><a type="button" class="btn btn-warning" href="/accounts/addressupdate/{{ dis.id }}">Update</a>
+                    <a type="button" class="btn btn-danger" href="/accounts/addressdelete/{{ dis.id }}">Delete</a>
                 </td>
             </tr>
             {% endfor %}
