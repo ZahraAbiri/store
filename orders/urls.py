@@ -1,4 +1,4 @@
-from django.db import router
+
 from django.urls import path
 
 from . import views
@@ -18,4 +18,11 @@ urlpatterns = [
     path('allOrderItem/', views.showAllOrderItems),
     path('orderView/<int:pk>/', views.show),
     path('orderItemView/<int:pk>/', views.showOrderItemView),
+    path('orderHistoryList/history/', views.orderHistoryList,name='orderHistoryList'),
+    path('orderStatusList/status/', views.orderStatusList,name='orderHistoryStatusList'),
+    path('order_List/list/', views.order_List,name='order_List'),
+    path('orderItemcreate/', views.orderItemcreate,name='orderItemcreate'),
+    path('orderItemDelete/<int:id>/', views.orderItemDelete,name='orderItemDelete'),
+    path('orderItemUpdate/<int:id>/', views.orderItemUpdate,name='orderItemUpdate'),
+    # path('getAllProduct/test/', views.getAllProduct,name='getAllProduct'),
 ]

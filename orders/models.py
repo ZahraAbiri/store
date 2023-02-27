@@ -31,6 +31,7 @@ class Order(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     discount = models.IntegerField(blank=True, null=True, default=None)
+    sent_status=models.BooleanField(default=False)
 
     class Meta:
         ordering = ('paid', '-updated')

@@ -1,0 +1,48 @@
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <title>Title</title>#}
+{#</head>#}
+{#<body>#}
+{#<div class="main">#}
+
+{% extends "base.html" %}
+{% block content %}
+<div class="card-body">
+    <h4>order List</h4>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">user</th>
+                <th scope="col">paid</th>
+                <th scope="col">sent_status</th>
+                <th scope="col">product name</th>
+                <th scope="col">price</th>
+{#                <th scope="col">quantity</th>#}
+{#                <th scope="col">available</th>#}
+            </tr>
+        </thead>
+        <tbody>
+            {% for dis in order %}
+            <tr>
+                <td>{{ dis.order.user.full_name }}</td>
+                <td>{{ dis.order.paid }}</td>
+                <td>{{ dis.order.sent_status }}</td>
+                <td>{{ dis.product.name }}</td>
+                <td>{{ dis.product.price }}</td>
+{#                <td>{{ dis.product.quantity }}</td>#}
+
+{#                <td>{{ dis.active }}</td>#}
+{#                <a href="{% url 'home:download_obj_bucket' obj.Key %}">download</a></td>#}
+                <td><a type="button" class="btn btn-warning" href="/orders/orderItemUpdate/{{ dis.id }} ">Update</a>
+                    <a type="button" class="btn btn-danger" href="/orders/orderItemDelete/{{ dis.id }}">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a type="button" class="btn btn-success" href="{% url 'orders:orderItemcreate' %}">Create</a>
+</div>
+{% endblock %}

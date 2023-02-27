@@ -1,6 +1,7 @@
 from ckeditor.fields import RichTextField
 from django import forms
 
+from orders.models import OrderItem
 from products.models import Category
 
 
@@ -10,3 +11,9 @@ class CartAddForm(forms.Form):
 
 class CouponApplyForm(forms.Form):
 	code = forms.CharField()
+
+class orderItemForm(forms.ModelForm):
+	class Meta:
+		model = OrderItem
+		fields='__all__'
+

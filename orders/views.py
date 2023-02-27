@@ -1,7 +1,7 @@
 import datetime
 
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
@@ -11,9 +11,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from permissions import IsOwnerOrReadOnly
+from accounts.models import Address
 from .cart import Cart
-from .forms import CartAddForm, CouponApplyForm
+from .forms import CartAddForm, CouponApplyForm, orderItemForm
 from .models import Order, OrderItem, Coupon
 from .models import Product
 from .serializer import OrderSerializer, OrderItemSerializer
@@ -27,8 +27,10 @@ class CartView(View):
         return render(request, 'orders/cart.html', {'cart': cart})
 
 
-class CartAddView(PermissionRequiredMixin, View):
-    permission_required = 'orders.add_order'
+class CartAddView(View):
+    # todo kkkkkkkkkkkkk
+
+    print('permision_required')
 
     def post(self, request, product_id):
         cart = Cart(request)
@@ -53,7 +55,9 @@ class OrderDetailView(LoginRequiredMixin, View):
 
     def get(self, request, order_id):
         order = get_object_or_404(Order, id=order_id)
-        return render(request, 'orders/order.html', {'order': order, 'form': self.form_class})
+        id = request.user.id
+        address = Address.objects.raw('SELECT * FROM accounts_address where customer_id="%s"' % id)
+        return render(request, 'orders/order.html', {'order': order, 'form': self.form_class, 'address': address})
 
 
 class OrderCreateView(LoginRequiredMixin, View):
@@ -67,40 +71,16 @@ class OrderCreateView(LoginRequiredMixin, View):
         return redirect('orders:order_detail', order.id)
 
 
-MERCHANT = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXX'
-ZP_API_REQUEST = "https://api.zarinpal.com/pg/v4/payment/request.json"
-ZP_API_VERIFY = "https://api.zarinpal.com/pg/v4/payment/verify.json"
-ZP_API_STARTPAY = "https://www.zarinpal.com/pg/StartPay/{authority}"
-description = "توضیحات مربوط به تراکنش را در این قسمت وارد کنید"
-CallbackURL = 'http://127.0.0.1:8000/orders/verify/'
-
-
 class OrderPayView(LoginRequiredMixin, View):
+    # permission_required = 'orders.add_order'
     def get(self, request, order_id):
         order = Order.objects.get(id=order_id)
         request.session['order_pay'] = {
             'order_id': order.id,
         }
-        # Order.save(order)
-        req_data = {
-            # "merchant_id": MERCHANT,
-            "amount": order.get_total_price(),
-            # "callback_url": CallbackURL,
-            # "description": description,
-            "metadata": {"mobile": request.user.phone_number, "email": request.user.email}
-        }
-        req_header = {"accept": "application/json",
-                      "content-type": "application/json'"}
-        # req = requests.post(url=ZP_API_REQUEST, data=json.dumps(
-        #     req_data), headers=req_header)
-        # authority = req.json()['data']['authority']
-        # if len(req.json()['errors']) == 0:
-        #     return redirect(ZP_API_STARTPAY.format(authority=authority))
-        # else:
-        #     e_code = req.json()['errors']['code']
-        #     e_message = req.json()['errors']['message']
-        # return HttpResponse(f"pay successfully")
-
+        order.paid = True
+        order.sent_status = True
+        order.save()
         return redirect('/')
 
 
@@ -113,32 +93,7 @@ class OrderVerifyView(LoginRequiredMixin, View):
         if request.GET.get('Status') == 'OK':
             req_header = {"accept": "application/json",
                           "content-type": "application/json'"}
-            req_data = {
-                "merchant_id": MERCHANT,
-                "amount": order.get_total_price(),
-                # "authority": t_authority
-            }
-            # req = requests.post(url=ZP_API_VERIFY, data=json.dumps(req_data), headers=req_header)
-            # if len(req.json()['errors']) == 0:
-            #     t_status = req.json()['data']['code']
-            #     if t_status == 100:
-            #         order.paid = True
-            #         order.save()
-            #         return HttpResponse('Transaction success.\nRefID: ' + str(
-            #             req.json()['data']['ref_id']
-            #         ))
-            #     elif t_status == 101:
-            #         return HttpResponse('Transaction submitted : ' + str(
-            #             req.json()['data']['message']
-            #         ))
-            #     else:
-            #         return HttpResponse('Transaction failed.\nStatus: ' + str(
-            #             req.json()['data']['message']
-            #         ))
-            # else:
-            #     e_code = req.json()['errors']['code']
-            #     e_message = req.json()['errors']['message']
-            #     return HttpResponse(f"Error code: {e_code}, Error Message: {e_message}")
+
         else:
             return HttpResponse('Transaction failed or canceled by user')
 
@@ -185,8 +140,10 @@ def showAllOrders(request):
     home = Order.objects.all()
     serializer = OrderSerializer(instance=home, many=True)
     return Response(data=serializer.data)
+
+
 @api_view(['GET', 'PUT', 'DELETE'])
-def show(request,pk):
+def show(request, pk):
     home = Order.objects.all()
     serializer = OrderSerializer(instance=home, many=True)
     # return Response(data=serializer.data)
@@ -210,13 +167,17 @@ def show(request,pk):
     elif request.method == 'DELETE':
         snippet.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 @api_view()
 def showAllOrderItems(request):
     home = OrderItem.objects.all()
     serializer = OrderItemSerializer(instance=home, many=True)
     return Response(data=serializer.data)
+
+
 @api_view(['GET', 'PUT', 'DELETE'])
-def showOrderItemView(request,pk):
+def showOrderItemView(request, pk):
     home = OrderItem.objects.all()
     serializer = OrderSerializer(instance=home, many=True)
     # return Response(data=serializer.data)
@@ -242,84 +203,147 @@ def showOrderItemView(request,pk):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+    # class OrderItemCreateView(APIView):
+    #     """
+    #         Create a new question
+    #     """
+    #     permission_classes = [IsAuthenticated, ]
+    #     serializer_class = OrderItemSerializer
+    #
+    #     def post(self, request):
+    #         srz_data = OrderItemSerializer(data=request.data)
+    #         if srz_data.is_valid():
+    #             srz_data.save()
+    #             return Response(srz_data.data, status=status.HTTP_201_CREATED)
+    #         return Response(srz_data.errors, status=status.HTTP_400_BAD_REQUEST)
+    #
+    #
+    # class QuestionUpdateView(APIView):
+    #     permission_classes = [IsOwnerOrReadOnly, ]
+    #
+    #     def put(self, request, pk):
+    #         question = OrderItem.objects.get(pk=pk)
+    #         self.check_object_permissions(request, question)
+    #         srz_data = OrderItem(instance=question, data=request.data, partial=True)
+    #         if srz_data.is_valid():
+    #             srz_data.save()
+    #             return Response(srz_data.data, status=status.HTTP_200_OK)
+    #         return Response(srz_data.errors, status=status.HTTP_400_BAD_REQUEST)
+    #
+    #
+    # class QuestionDeleteView(APIView):
+    #     permission_classes = [IsOwnerOrReadOnly, ]
+    #
+    #     def delete(self, request, pk):
+    #         question = OrderItem.objects.get(pk=pk)
+    #         question.delete()
+    #         return Response({'message': ' deleted'}, status=status.HTTP_200_OK)
+    # class OrderList(mixins.RetrieveModelMixin,
+    #                     mixins.UpdateModelMixin,
+    #                     mixins.DestroyModelMixin,
+    #                     generics.GenericAPIView):
+    #     """
+    #     List all orders, or create a new snippet.
+    #     """
+    #     # serializer_class = OrganisationDetailSerializer
+    #     queryset = Order.objects.all()
+    #     serializer_class = OrderSerializer
+    #     lookup_field = 'orderview'
+    #
+    #
+    #     def get(self, request, *args, **kwargs):
+    #         return self.retrieve(request, *args, **kwargs)
+    #
+    #     def put(self, request, *args, **kwargs):
+    #         return self.update(request, *args, **kwargs)
+    #
+    #     def delete(self, request, *args, **kwargs):
+    #         return self.destroy(request, *args, **kwargs)
+    #     # def get_object(self, pk):
+    #     #     try:
+    #     #         return Order.objects.get(pk=pk)
+    #     #     except Order.DoesNotExist:
+    #     #         raise Http404
+    #     #
+    #     # def get(self, request, pk, format=None):
+    #     #     snippet = self.get_object(pk)
+    #     #     serializer = OrderSerializer(snippet)
+    #     #     return Response(serializer.data)
+    #     #
+    #     # def put(self, request, pk, format=None):
+    #     #     snippet = self.get_object(pk)
+    #     #     serializer = OrderSerializer(snippet, data=request.data)
+    #     #     if serializer.is_valid():
+    #     #         serializer.save()
+    #     #         return Response(serializer.data)
+    #     #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    #     #
+    #     # def delete(self, request, pk, format=None):
+    #     #     snippet = self.get_object(pk)
+    #     #     snippet.delete()
+    #     #     return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-# class OrderItemCreateView(APIView):
-#     """
-#         Create a new question
-#     """
-#     permission_classes = [IsAuthenticated, ]
-#     serializer_class = OrderItemSerializer
-#
-#     def post(self, request):
-#         srz_data = OrderItemSerializer(data=request.data)
-#         if srz_data.is_valid():
-#             srz_data.save()
-#             return Response(srz_data.data, status=status.HTTP_201_CREATED)
-#         return Response(srz_data.errors, status=status.HTTP_400_BAD_REQUEST)
-#
-#
-# class QuestionUpdateView(APIView):
-#     permission_classes = [IsOwnerOrReadOnly, ]
-#
-#     def put(self, request, pk):
-#         question = OrderItem.objects.get(pk=pk)
-#         self.check_object_permissions(request, question)
-#         srz_data = OrderItem(instance=question, data=request.data, partial=True)
-#         if srz_data.is_valid():
-#             srz_data.save()
-#             return Response(srz_data.data, status=status.HTTP_200_OK)
-#         return Response(srz_data.errors, status=status.HTTP_400_BAD_REQUEST)
-#
-#
-# class QuestionDeleteView(APIView):
-#     permission_classes = [IsOwnerOrReadOnly, ]
-#
-#     def delete(self, request, pk):
-#         question = OrderItem.objects.get(pk=pk)
-#         question.delete()
-#         return Response({'message': ' deleted'}, status=status.HTTP_200_OK)
-# class OrderList(mixins.RetrieveModelMixin,
-#                     mixins.UpdateModelMixin,
-#                     mixins.DestroyModelMixin,
-#                     generics.GenericAPIView):
-#     """
-#     List all orders, or create a new snippet.
-#     """
-#     # serializer_class = OrganisationDetailSerializer
-#     queryset = Order.objects.all()
-#     serializer_class = OrderSerializer
-#     lookup_field = 'orderview'
-#
-#
-#     def get(self, request, *args, **kwargs):
-#         return self.retrieve(request, *args, **kwargs)
-#
-#     def put(self, request, *args, **kwargs):
-#         return self.update(request, *args, **kwargs)
-#
-#     def delete(self, request, *args, **kwargs):
-#         return self.destroy(request, *args, **kwargs)
-#     # def get_object(self, pk):
-#     #     try:
-#     #         return Order.objects.get(pk=pk)
-#     #     except Order.DoesNotExist:
-#     #         raise Http404
-#     #
-#     # def get(self, request, pk, format=None):
-#     #     snippet = self.get_object(pk)
-#     #     serializer = OrderSerializer(snippet)
-#     #     return Response(serializer.data)
-#     #
-#     # def put(self, request, pk, format=None):
-#     #     snippet = self.get_object(pk)
-#     #     serializer = OrderSerializer(snippet, data=request.data)
-#     #     if serializer.is_valid():
-#     #         serializer.save()
-#     #         return Response(serializer.data)
-#     #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-#     #
-#     # def delete(self, request, pk, format=None):
-#     #     snippet = self.get_object(pk)
-#     #     snippet.delete()
-#     #     return Response(status=status.HTTP_204_NO_CONTENT)
+from itertools import chain
+
+
+def orderHistoryList(request):
+    id = request.user.id
+    order = OrderItem.objects.select_related('order').filter(order__user_id=id).select_related('product')
+    return render(request, "orders/orderHistory.html", {'order': order})
+
+
+def orderStatusList(request):
+    id = request.user.id
+    order = OrderItem.objects.select_related('order').filter(order__user_id=id).select_related('product')
+    return render(request, "orders/orderStatus.html", {'order': order})
+
+def orderItemUpdate(request, id):
+    context = {}
+    obj = get_object_or_404(OrderItem, id=id)
+    form = orderItemForm(request.POST or None, instance=obj)
+    if form.is_valid():
+        form.save()
+        return redirect('accounts:userlist')
+    context["form"] = form
+    return render(request, "orders/order-update.html", context)
+def order_List(request):
+    order = OrderItem.objects.all()
+    return render(request, "orders/order-list.html", {'order': order})
+
+def orderItemDelete(request, id):
+    context = {}
+    obj = get_object_or_404(OrderItem, id=id)
+    if request.method == "POST":
+        obj.delete()
+        return redirect("orders:order_List")
+
+    return render(request, "orders/delete_order.html", context)
+
+def orderItemcreate(request):
+    if request.method == "POST":
+        form = orderItemForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('orders:order_List')
+    else:
+        form = orderItemForm()
+    return render(request, 'orders/create-order.html', {'form': form})
+
+
+def getAllProduct(request):
+    products =Product.objects.all()
+    for i in products:
+        if i.discount is not None:
+            x=i.discount*0.01
+            y=i.price*x
+            z=i.price-(y)
+            i.price=z
+            print(i.price)
+        else:
+            continue
+    for i in products:
+        print(i.price)
+    return render(request,'orders/create-order.html')
+
+

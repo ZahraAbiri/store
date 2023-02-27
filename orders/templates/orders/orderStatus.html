@@ -24,35 +24,68 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="card-body">
-    <h4>discount List</h4>
-    <table class="table">
-        <thead>
+        <h4>order status List</h4>
+
+<div class="container table-responsive py-5">
+        <table class="table table-bordered table-hover">
+            <thead class="thead-dark" >
             <tr>
-{#                <th scope="col">category</th>#}
-                <th scope="col">code</th>
-                <th scope="col">valid_from</th>
-                <th scope="col">valid_to</th>
-                <th scope="col">discount</th>
-                <th scope="col">active</th>
-{#                <th scope="col">available</th>#}
+                <th scope="col">#</th>
+                <th scope="col">product name</th>
+                <th scope="col">price</th>
+                <th scope="col">sent_status</th>
+                <th scope="col">quantity</th>
             </tr>
-        </thead>
-        <tbody>
-            {% for dis in discount %}
-            <tr>
-{#                <td>{{ product.category.name }}</td>#}
-                <td>{{ dis.code }}</td>
-                <td>{{ dis.valid_from }}</td>
-                <td>{{ dis.valid_to }}</td>
-                <td>{{ dis.discount }}</td>
-                <td>{{ dis.active }}</td>
-                <td><a type="button" class="btn btn-warning" href="/discountupdate/{{ dis.id }}">Update</a>
-                    <a type="button" class="btn btn-danger" href="/discountdelete/{{ dis.id }}">Delete</a>
-                </td>
-            </tr>
+            </thead>
+            {% for x in order %}
+                <tbody>
+                <tr>
+                    <th scope="row">{{ x }}</th>
+                    <td>{{ x.product.name }}</td>
+                    <td>{{ x.price }}</td>
+                    {% if x.order.sent_status == 0 %}
+                        <td>dont send</td>
+                    {% else %}
+                        <td>send</td>
+                    {% endif %}
+                    <td>{{ x.quantity }}</td>
+                </tr>
+                </tbody>
             {% endfor %}
-        </tbody>
-    </table>
-    <a type="button" class="btn btn-success" href="{% url 'products:discountcreate' %}">Create</a>
+        </table>
 </div>
+        {#       sent_status : {{ x.order.sent_status }}#}
+        <br/>
+
+
+        {#    <table class="table">#}
+        {#        <thead>#}
+        {#            <tr>#}
+        {#                <th scope="col">category</th>#}
+        {#                <th scope="col">code</th>#}
+        {#                <th scope="col">valid_from</th>#}
+        {#                <th scope="col">valid_to</th>#}
+        {#                <th scope="col">discount</th>#}
+        {#                <th scope="col">active</th>#}
+        {#                <th scope="col">available</th>#}
+        {#            </tr>#}
+        {#        </thead>#}
+        {#        <tbody>#}
+        {#            {% for dis in discount %}#}
+        {#            <tr>#}
+        {#                <td>{{ product.category.name }}</td>#}
+        {#                <td>{{ dis.code }}</td>#}
+        {#                <td>{{ dis.valid_from }}</td>#}
+        {#                <td>{{ dis.valid_to }}</td>#}
+        {#                <td>{{ dis.discount }}</td>#}
+        {#                <td>{{ dis.active }}</td>#}
+        {#                <td><a type="button" class="btn btn-warning" href="/discountupdate/{{ dis.id }}">Update</a>#}
+        {#                    <a type="button" class="btn btn-danger" href="/discountdelete/{{ dis.id }}">Delete</a>#}
+        {#                </td>#}
+        {#            </tr>#}
+        {#            {% endfor %}#}
+        {#        </tbody>#}
+        {#    </table>#}
+        {#    <a type="button" class="btn btn-success" href="{% url 'products:discountcreate' %}">Create</a>#}
+    </div>
 {% endblock %}

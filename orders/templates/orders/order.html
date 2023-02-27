@@ -1,13 +1,110 @@
 {% extends 'base.html' %}
+{#{% extends 'paypage.html' %}#}
+
+{% load static %}
+{#<script src="../../static/js/paymentCard.js"></script>#}
 
 {% block content %}
-    <h3>Checkout</h3>
-    <p>Total: {{ order.get_total_price }}</p>
-    <a href="{% url 'orders:order_pay' order.id %}" class="btn btn-primary">Pay</a>
-<br><br>
+    <p>select address</p>
+<select class="form-select" aria-label="Default select example">
+        <option selected>Open this select address</option>
+        {% for add in address %}
+            <option value="1">city_name:{{ add.city_name }} , avenue_name:{{ add.avenue_name }} ,
+                street_name:{{ add.street_name }} ,
+                plate:{{ add.plate }} , zipcode:{{ add.zipCode }}</option>
+        {% endfor %}
+    </select>
+
+    <br><br>
+    <p>COUPON CODE</p>
     <form action="{% url 'orders:apply_coupon' order.id %}" method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Apply">
     </form>
+    <br/>
+    <div style="margin-left: 35%">
+    <div class="">
+  <div class="container">
+<br>
+
+<div class="row">
+	<aside class="col-sm-6">
+
+
+<article class="card">
+<div class="card-body p-5">
+
+
+<form role="form">
+<div class="form-group">
+<label for="username">Full name (on the card)</label>
+<div class="input-group">
+	<div class="input-group-prepend">
+		<span class="input-group-text"><i class="fa fa-user"></i></span>
+	</div>
+	<input type="text" class="form-control" name="username" placeholder="" required="">
+</div> <!-- input-group.// -->
+</div> <!-- form-group.// -->
+
+<div class="form-group">
+<label for="cardNumber">Card number</label>
+<div class="input-group">
+	<div class="input-group-prepend">
+		<span class="input-group-text"><i class="fa fa-credit-card"></i></span>
+	</div>
+	<input type="text" class="form-control" name="cardNumber" placeholder="">
+</div> <!-- input-group.// -->
+</div> <!-- form-group.// -->
+
+<div class="row">
+    <div class="col-sm-8">
+        <div class="form-group">
+            <label><span class="hidden-xs">Expiration</span> </label>
+        	<div class="form-inline">
+        		<select class="form-control" style="width:45%">
+				  <option>MM</option>
+				  <option>01 - Janiary</option>
+				  <option>02 - February</option>
+				  <option>03 - February</option>
+				</select>
+	            <span style="width:10%; text-align: center"> / </span>
+	            <select class="form-control" style="width:45%">
+				  <option>YY</option>
+				  <option>2018</option>
+				  <option>2019</option>
+				</select>
+        	</div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="form-group">
+            <label data-toggle="tooltip" title="" data-original-title="3 digits code on back side of the card">CVV <i class="fa fa-question-circle"></i></label>
+            <input class="form-control" required="" type="text">
+        </div> <!-- form-group.// -->
+    </div>
+</div> <!-- row.// -->
+<p>Total: {{ order.get_total_price }}</p>
+    <a href="{% url 'orders:order_pay' order.id %}" class="btn btn-primary" style="margin-left: 45%">Pay</a>
+</form>
+</div> <!-- card-body.// -->
+</article> <!-- card.// -->
+
+
+	</aside> <!-- col.// -->
+
+</div> <!-- row.// -->
+
+</div>
+<!--container end.//-->
+
+<br><br>
+
+</div>
+    </div>
+
+
+    <br/>
+
+
 {% endblock %}
