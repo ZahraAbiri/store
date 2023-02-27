@@ -26,6 +26,13 @@ class HomeView(View):
 class ProductDetailView(View):
     def get(self, request, slug):
         product = get_object_or_404(Product, slug=slug)
+
+        if product.discount is not None:
+            x = product.discount * 0.01
+            y = product.price * x
+            z = product.price - (y)
+            product.price = z
+            print(product.price)
         form = CartAddForm()
         return render(request, 'home/detail.html', {'product': product, 'form': form})
 
@@ -67,8 +74,6 @@ class my_form(View):
             form = addProForm()
             return render(request, 'home/addProduct.html', {'form': form})
 
-
-#
 
 def productList(request):
     # print(id)

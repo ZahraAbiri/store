@@ -38,15 +38,15 @@ class addCategoryForm(forms.ModelForm):
 
 
 class addDiscountForm(forms.ModelForm):
-    valid_from =  forms.DateField(
-    widget=forms.DateInput(attrs={'type': 'date'}),
-)
-    valid_to = forms.DateField(
-    widget=forms.DateInput(attrs={'type': 'date'}),
-)
+#     valid_from =  forms.DateField(
+#     widget=forms.DateInput(format='%d-%m-%Y %H:%M:%S',attrs={'placeholder':"DD-MM-YY HH:MM:SS"}),
+# )
+#     valid_to = forms.DateField(
+#     widget=forms.DateInput(format='%d-%m-%Y %H:%M:%S',attrs={'placeholder':"DD-MM-YY HH:MM:SS"}),
+# )
     class Meta:
         model = Coupon
-        fields = ['code','discount','active']
+        fields = ['code','discount','active','valid_from','valid_to']
 
     # def __init__(self, *args, **kwargs):
     #     super().__init__(*args, **kwargs)

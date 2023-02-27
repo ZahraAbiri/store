@@ -23,6 +23,7 @@ class Category(models.Model):
 
 class Product(models.Model):
     category = models.ManyToManyField(Category, related_name='products')
+
     name = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
     image = models.ImageField(upload_to='media')
@@ -31,7 +32,7 @@ class Product(models.Model):
     available = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-
+    discount = models.IntegerField(blank=True, null=True, default=None)
     class Meta:
         ordering = ('name',)
 
@@ -40,3 +41,10 @@ class Product(models.Model):
 
     def get_absolute_url(self):
         return reverse('products:product_detail', args=[self.slug, ])
+
+
+
+class CartItem(models.Model):
+    product_name = models.CharField(max_length=200)
+    product_price = models.FloatField()
+    product_quantity = models.PositiveIntegerField()
