@@ -1,35 +1,87 @@
 {% extends 'base.html' %}
 {% load static %}
-
+  <script src="{% static '/js/main.js' %}"></script>
 {% block extra_headers %}
-<link rel="stylesheet" href="{% static 'home/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'home/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'home/css/main.css' %}">
+    <link rel="stylesheet" href="{% static '/scss/main.scss' %}">
+    <link rel="stylesheet" href="{% static '/scss/style.scss' %}">
+    <link rel="stylesheet" href="{% static '/scss/theme' %}">
 {% endblock %}
 
 {% block content %}
+   <section class="hero-banner">
+      <div class="container">
+        <div class="row no-gutters align-items-center pt-60px">
+          <div class="col-5 d-none d-sm-block">
+            <div class="hero-banner__img">
+              <img class="img-fluid" src="{% static 'image/hero-banner.png' %}"  alt="">
+{#                <img src="{% static '/wallpaper.jpeg' %}" alt="My image" height="300px" width="700px"/>  #}
+            </div>
+          </div>
+          <div class="col-sm-7 col-lg-6 offset-lg-1 pl-4 pl-md-5 pl-lg-0">
+            <div class="hero-banner__content">
+              <h4>Shop is fun</h4>
+              <h1>Browse Our Premium Product</h1>
+              <p>Us which over of signs divide dominion deep fill bring they're meat beho upon own earth without morning over third. Their male dry. They are great appear whose land fly grass.</p>
 
+            </div>
+          </div>
+        </div>
+      </div>
+   </section>
     {% for category in categories %}
 
         <div class="btn-group">
-            <a href="{{ category.get_absolute_url }}" class="btn btn-danger">{{ category.name }}</a>
-            <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+            <a href="{{ category.get_absolute_url }}" class="btn btn-primary">{{ category.name }}</a>
+            <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown"
+                    aria-expanded="false">
                 <span class="visually-hidden">Toggle Dropdown</span>
             </button>
             <ul class="dropdown-menu">
                 {% for sub in category.scategory.all %}
-                <li><a class="dropdown-item" href="{{ sub.get_absolute_url }}">{{ sub.name }}</a></li>
+                    <li><a class="dropdown-item" href="{{ sub.get_absolute_url }}">{{ sub.name }}</a></li>
                 {% endfor %}
             </ul>
         </div>
 
     {% endfor %}
-    <br/><br/>
-    {% for product in products %}
-        <div class="card" style="width: 18rem; display:inline-block;">
-            <img src="{{ product.image.url }}" class="card-img-top" width="200px">
-            <div class="card-body">
-                <a href="{{ product.get_absolute_url }}" class="card-title">{{ product.name }}</a>
-            </div>
+    <section class="section-margin calc-60px">
+      <div class="container">
+        <div class="section-intro pb-60px">
+          <p>Item in the market</p>
+          <h2>Trending <span class="section-intro__style">Product</span></h2>
         </div>
-    {% endfor %}
+        <div class="row">
+            {% for product in products %}
+{#        <div class="card" style="width: 18rem; display:inline-block;">#}
+{#            <img src="{{ product.image.url }}" class="card-img-top" alt="product_image"/>#}
+{#            <div class="card-body">#}
+{#                <a href="{{ product.get_absolute_url }}" class="card-title">{{ product.name }}</a>#}
+{#            </div>#}
+{#        </div>#}
+
+          <div class="col-md-6 col-lg-4 col-xl-3">
+            <div class="card text-center card-product">
+              <div class="card-product__img">
+                <img class="card-img" src="{{ product.image.url }}" alt="">
+
+              </div>
+              <div class="card-body">
+                <h4 class="card-product__title"><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></h4>
+                <p class="card-product__price">${{ product.price }}</p>
+              </div>
+            </div>
+          </div>
+ {% endfor %}
+        </div>
+      </div>
+    </section>
+     <section>
+     <img src="{% static 'image/shop.jpeg' %}" height="300px" width="100%"/>
+     </section>
+
+    <br/><br/>
+
 
 {% endblock %}

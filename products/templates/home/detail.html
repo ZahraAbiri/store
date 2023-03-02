@@ -1,21 +1,94 @@
 {% extends 'base.html' %}
+{% load static %}
+<script src="{% static '/js/main.js' %}"></script>
+{% block extra_headers %}
+    <link rel="stylesheet" href="{% static 'home/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'home/css/main.css' %}">
+    <link rel="stylesheet" href="{% static '/scss/main.scss' %}">
+    <link rel="stylesheet" href="{% static '/scss/style.scss' %}">
+    <link rel="stylesheet" href="{% static '/scss/theme' %}">
+{% endblock %}
 
 {% block content %}
-    <div class="container">
-    <h2>{{ product.name }}</h2>
-    <small>{{ product.created }}</small><br/>
-    <p>{{ product.price }} Toman</p>
-    {% if product.discount != None %}
-    <p>{{ product.discount }} % off</p>
-    {% endif %}
-    <img src="{{ product.image.url }}" style="width: 300px;">
-    <p>{{ product.description|safe }}</p><br/><br/>
+    <section class="blog-banner-area" id="blog">
+        <div class="container h-100">
+            <div class="blog-banner">
+                <div class="text-center">
+                    <h1>Shop Single</h1>
+                    <nav aria-label="breadcrumb" class="banner-breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url 'products:products' %}">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Shop Single</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="product_image_area">
+        <div class="container">
+            <div class="row s_product_inner">
+                <div class="col-lg-6">
+                    <div class="owl-carousel owl-theme s_Product_carousel">
+                        <div class="single-prd-item">
+                            <img class="img-fluid" src="{{ product.image.url }}" style="width: 300px;" alt="">
+                            {#							<img class="img-fluid" src="img/category/s-p1.jpg" alt="">#}
+                        </div>
+                        <!-- <div class="single-prd-item">
+                            <img class="img-fluid" src="img/category/s-p1.jpg" alt="">
+                        </div>
+                        <div class="single-prd-item">
+                            <img class="img-fluid" src="img/category/s-p1.jpg" alt="">
+                        </div> -->
+                    </div>
+                </div>
+                <div class="col-lg-5 offset-lg-1">
+                    <div class="s_product_text">
+                        <h3>{{ product.name }}</h3>
+                        <h2>${{ product.price }}</h2>
+                        <ul class="list">
+                            <li><span>{{ product.created }}</span></li>
+                            {% if product.discount != None %}
+                                <li><span>{{ product.discount }} % off</span></li>
+                            {% endif %}
+{#                            <li><a href="#"><span>Availibility</span> : In Stock</a></li>#}
+                        </ul>
+                        <p style="margin-top:-5%">{{ product.description|safe }}</p>
+                        <div class="product_count">
 
-    <form action="{% url 'orders:cart_add' product.id %}" method="post">
-        {% csrf_token %}
-        {{ form }}
-        <input type="submit" value="add to cart">
-    </form>
+                            <form action="{% url 'orders:cart_add' product.id %}" method="post">
+                                {% csrf_token %}
+                                {{ form }}
+                                <input type="submit" class="button primary-btn" value="add to cart"
+                                       style="width:35%;border-radius: 40%">
+                                {#                                <a class="button primary-btn" href="#">Add to Cart</a>#}
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+
+
+
+{#    <div class="container">#}
+{#        <h2></h2>#}
+        {#        <small>{{ product.created }}</small><br/>#}
+        {#        <p>{{ product.price }} Toman</p>#}
+{#        {% if product.discount != None %}#}
+{#            <p>{{ product.discount }} % off</p>#}
+{#        {% endif %}#}
+{#        <img src="{{ product.image.url }}" style="width: 300px;">#}
+{#        <p>{{ product.description|safe }}</p><br/><br/>#}
+{##}
+{#        <form action="{% url 'orders:cart_add' product.id %}" method="post">#}
+{#            {% csrf_token %}#}
+{#            {{ form }}#}
+{#            <input type="submit" value="add to cart">#}
+{#        </form>#}
+{#    </div>#}
 
 {% endblock %}

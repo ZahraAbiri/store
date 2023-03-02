@@ -45,6 +45,6 @@ class Product(models.Model):
 
 
 class CartItem(models.Model):
-    product_name = models.CharField(max_length=200)
-    product_price = models.FloatField()
+    product_id = models.IntegerField()
+    user_id = models.IntegerField()
     product_quantity = models.PositiveIntegerField()

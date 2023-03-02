@@ -4,11 +4,16 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 
 # from utils import IsAdminUserMixin
+from rest_framework import serializers, status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
 from orders.cart import Cart
 from orders.forms import CartAddForm
-from orders.models import Coupon
+from orders.models import Coupon, Order
 from .forms import addProForm, addCategoryForm, addDiscountForm
-from .models import Product, Category
+from .models import Product, Category, CartItem
+from .serializer import CartItemSerializer
 
 
 class HomeView(View):
@@ -252,3 +257,52 @@ def update_discount(request, id):
         return redirect('products:discountlist')
     context["form"] = form
     return render(request, "home/discount-update.html", context)
+
+
+
+@api_view(['POST'])
+def add_items(request):
+    item = CartItemSerializer(data=request.data)
+
+    # validating for already existing data
+    if CartItem.objects.filter(**request.data).exists():
+        raise serializers.ValidationError('This data already exists')
+
+    if item.is_valid():
+        item.save()
+        return Response(item.data)
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET'])
+def view_items(request):
+    # checking for the parameters from the URL
+    if request.query_params:
+        items = CartItem.objects.filter(**request.query_params.dict())
+    else:
+        items = CartItem.objects.all()
+
+    # if there is something in items else raise error
+    if items:
+        serializer = CartItemSerializer(items, many=True)
+        return Response(serializer.data)
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['POST'])
+def update_items(request, pk):
+    item = CartItem.objects.get(pk=pk)
+    data = CartItemSerializer(instance=item, data=request.data)
+
+    if data.is_valid():
+        data.save()
+        return Response(data.data)
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+# @api_view(['DELETE'])
+# def delete_items(request, pk):
+#     item = get_object_or_404(Order, pk=pk)
+#     item.delete()
+#     return Response(status=status.HTTP_202_ACCEPTED)
