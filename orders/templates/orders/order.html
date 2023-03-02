@@ -8,15 +8,18 @@
     position: relative;">
         <div class="container">
             <div class="row" style="">
-                <div class="col-lg-6" style="background-color: #f5d3d3;box-shadow: 2px 2px 6px 2px rgba(0, 0, 0, 0.23);">
-                    <div >
+                <div class="col-lg-6"
+                     style="background-color: #f5d3d3;box-shadow: 2px 2px 6px 2px rgba(0, 0, 0, 0.23);">
+                    <div>
 
 
                         <br/>
 
                         <div style="width: 90%">
-{#                            <p>select address</p>#}
-                        <img src="{% static 'js/add.jpeg' %}" width="60px">
+                            {#                            <p>select address</p>#}
+                            <img src="{% static 'js/add.jpeg' %}" width="60px">
+                            <a type="button"  class="btn  btn-success"
+                               href="{% url 'accounts:cusAdd' %}">add address</a>
 
                             <select class="form-select" aria-label="Default select example">
                                 <option selected>Open this select address</option>
