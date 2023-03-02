@@ -21,12 +21,14 @@ class OrderSerializer(serializers.Serializer):
     discount = serializers.IntegerField()
 class OrderItemSerializer(serializers.Serializer):
     # order = serializers.Fo(default=False)
-    # product = serializers.DateTimeField()
+    products_id = serializers.CharField(source='product.id', read_only=True)
+    products_name = serializers.CharField(source='product.name', read_only=True)
     price = serializers.IntegerField()
     quantity = serializers.IntegerField()
-    # order = serializers.StringRelatedField(many=True)
+    user_id = serializers.CharField(source='order.user.id', read_only=True)
+    order_id = serializers.CharField(source='order.id', read_only=True)
     # product = serializers.StringRelatedField(many=True)
 
     class Meta:
         model = OrderItem
-        fields = ['order', 'product']
+        fields = ['user_id','quantity','price','products_name','order_id','products_id']

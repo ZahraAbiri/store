@@ -56,7 +56,7 @@ class OrderDetailView(LoginRequiredMixin, View):
     def get(self, request, order_id):
         order = get_object_or_404(Order, id=order_id)
         id = request.user.id
-        address = Address.objects.raw('SELECT * FROM accounts_address where customer_id="%s"' % id)
+        address = Address.objects.filter(customer_id=id)
         return render(request, 'orders/order.html', {'order': order, 'form': self.form_class, 'address': address})
 
 

@@ -32,7 +32,7 @@ class Order(models.Model):
     updated = models.DateTimeField(auto_now=True)
     discount = models.IntegerField(blank=True, null=True, default=None)
     sent_status=models.BooleanField(default=False)
-
+    # totalprice
     class Meta:
         ordering = ('paid', '-updated')
 
