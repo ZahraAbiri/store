@@ -1,74 +1,105 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <div class="navbar-nav">
-            {#            {% for item in cart %}#}
-            {#                {% if cart.lenght == 0 %}#}
-            {#                    <script>localStorage.setItem("count", {{cart.lenght}});</script>#}
-            {#                    <span id="boot-icon" class="bi bi-cart"#}
-            {#                          style="font-size: 34px; opacity: 1; color: rgb(255, 0, 0); -webkit-text-stroke-width: .8px;" ><a href="{% url 'orders:cart' %}"><h4 style="margin-top:-13%!important;color: #FFB30E">0</h4></a></span>#}
-            {#                {% else %}#}
-            {#                    <script>localStorage.removeItem('count');</script>#}
-            {##}
-            {#                {% endif %}#}
-            {#                <script>let x = localStorage.getItem("count");</script>#}
-            {##}
-            {#            {% endfor %}#}
-            {% if cart >= 0 %}
-                <span id="boot-icon" class="bi bi-cart"
-                      style="font-size: 34px; opacity: 1; color: rgb(255, 0, 0); -webkit-text-stroke-width: .8px;"><a
-                        href="{% url 'orders:cart' %}"><h4
-                        style="margin-top:-13%!important;color: #FFB30E">{{ cart }}</h4></a></span>
-            {% endif %}
-            {#            <a class="nav-link active" href="{% url 'home:home' %}">Home</a>#}
+        <div class="navbar-nav ">
+            {% load static %}
+            <div class="cart">
+                <span class="count">{{ cart|length }}</span>
+                <a class="material-icons bi bi-cart" href="{% url 'orders:cart' %}"></a>
+            </div>
             {% if request.user.is_authenticated %}
-                <a class="nav-link active" href="{% url 'accounts:user_logout' %}">Logout</a>
-                <a class="nav-link active"><p>welcome :{{ request.user.full_name }}</p></a>
-                {#             <span class="bi bi-cart" style="color: #FFB30E"></span>#}
+                <a class="nav-link active material-icons bi bi-power" href="{% url 'accounts:user_logout' %}"></a>
+                <a class="nav-link active material-icons bi bi-unlock" href="{% url 'products:products' %}">{{ request.user.full_name }}</a>
 
             {% else %}
-                {#                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"#}
-                {#                     class="bi bi-cart-fill" viewBox="0 0 16 16">#}
-                {#                    <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>#}
-                {#                </svg>#}
-
                 <a class="nav-link active" href="{% url 'accounts:user_register' %}">Register</a>
                 <a class="nav-link active" href="{% url 'accounts:user_login' %}">Login</a>
             {% endif %}
             {% if request.user.is_admin %}
-                <a class="nav-link active">admin</a>
-                <a class="nav-link active" href="{% url 'products:productlist' %}">product management</a>
-                <a class="nav-link active" href="{% url 'products:categorylist' %}">category management</a>
-                <a class="nav-link active" href="{% url 'products:discountlist' %}">discount management</a>
-                <a class="nav-link active" href="{% url 'accounts:addresslist' %}">address</a>
-                <a class="nav-link active" href="{% url 'accounts:profileUpdate' %}">profile update</a>
-
-                {#            <a class="nav-link active" href="{% url 'home:bucket' %}">Bucket</a>#}
+                <ul>
+                    <li class="nav-item dropdown">
+                        <a style="color:white" class="nav-link dropdown-toggle  material-icons bi bi-file-earmark-richtext" href="#"
+                           id="navbarDropdownMenuLink" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            management
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <li><a class="nav-link active" href="{% url 'products:productlist' %}" style="color:black">product
+                                management</a>
+                            </li>
+                            <li><a class="nav-link active" href="{% url 'products:discountlist' %}" style="color:black">discount
+                                management</a>
+                            </li>
+                            <li><a class="nav-link active" href="{% url 'accounts:userlist' %}" style="color:black">user
+                                management</a>
+                            </li>
+                            <li><a class="nav-link active" href="{% url 'orders:order_List' %}" style="color:black">order
+                                management</a>
+                            </li>
+                            <li><a class="nav-link active" href="{% url 'accounts:addressListManagement' %}"
+                                   style="color:black">adress
+                                management</a>
+                            </li>
+                            <li><a class="nav-link active" href="{% url 'products:categorylist' %}" style="color:black">category
+                                management</a>
+                            </li>
+                            <li><a class="nav-link active" href="{% url 'accounts:profileUpdate' %}"
+                                   style="color:black">profile update</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
             {% endif %}
             {% if request.user.is_customer %}
-                <a class="nav-link active">customer</a>
-                <a class="nav-link active">profile</a>
-                <a class="nav-link active">address</a>
-                <a class="nav-link active">order history</a>
-                <a class="nav-link active">order status</a>
 
-                {#            <a class="nav-link active" href="{% url 'home:bucket' %}">Bucket</a>#}
+                <a class="nav-link active material-icons bi bi-file-person"
+                   href="{% url 'accounts:profileUpdate' %}">profile</a>
+                <a class="nav-link active material-icons bi bi-building"
+                   href="{% url 'accounts:addresslist' %}">address</a>
+                <a class="nav-link active material-icons bi bi-file-text"
+                   href="{% url 'orders:orderHistoryList' %}">order
+                    history</a>
+                <a class="nav-link active material-icons bi bi-clipboard-check"
+                   href="{% url 'orders:orderHistoryStatusList' %}">order status</a>
             {% endif %}
             {% if request.user.is_nazer %}
-                <a class="nav-link active">nazer</a>
-                <a class="nav-link active">panel</a>
-
-                {#            <a class="nav-link active" href="{% url 'home:bucket' %}">Bucket</a>#}
+                <i class="bi-card-heading"></i>
+                <a class="nav-link active material-icons bi bi-card-heading"
+                   href="{% url 'accounts:nazer_panel' %}">nazer
+                    panel</a>
+                <a class="nav-link active material-icons bi bi-file-person"
+                   href="{% url 'accounts:profileUpdate' %}">profile
+                    update</a>
             {% endif %}
             {% if request.user.is_operator %}
-                <a class="nav-link active">operater</a>
-                <a class="nav-link active">panel</a>
+                <ul>
+                    <li class="nav-item dropdown">
+                        <a style="color:white"
+                           class="nav-link dropdown-toggle material-icons bi bi-file-earmark-richtext" href="#"
+                           id="navbarDropdownMenuLink" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            management
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <li><a style="color:black" class="nav-link active" href="{% url 'accounts:userlist' %}">user
+                                management</a>
+                            </li>
+                            <li><a style="color:black" class="nav-link active" href="{% url 'orders:order_List' %}">order
+                                management</a>
+                            </li>
+                            <li><a style="color:black" class="nav-link active"
+                                   href="{% url 'accounts:addressListManagement' %}">adress management</a></li>
+                            <li><a style="color:black" class="nav-link active "
+                                   href="{% url 'accounts:profileUpdate' %}">profile
+                                update</a></li>
+                        </ul>
+                    </li>
+                </ul>
 
-                {#            <a class="nav-link active" href="{% url 'home:bucket' %}">Bucket</a>#}
+
+                {#                <a class="nav-link active">operater</a>#}
+
+
             {% endif %}
-
-
-
-            {#            <a class="nav-link active" href="{% url 'orders:cart' %}">CART {{ cart|length }}</a>#}
         </div>
     </div>
 </nav>

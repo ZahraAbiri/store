@@ -1,0 +1,59 @@
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <title>Title</title>#}
+{#</head>#}
+{#<body>#}
+{#<div class="main">#}
+{##}
+{#    {% for data in dataset %}.#}
+{##}
+{#    {{ data.name }}<br/>#}
+{#    {{ data.price }}<br/>#}
+{#    {{ data.category }}<br/>#}
+{##}
+{#    <hr/>#}
+{##}
+{#    {% endfor %}#}
+{##}
+{#</div>#}
+{#</body>#}
+{#</html>#}
+
+{% extends "base.html" %}
+{% block content %}
+<div class="card-body">
+    <h4>discount List</h4>
+    <table class="table">
+        <thead>
+            <tr>
+{#                <th scope="col">category</th>#}
+                <th scope="col">name</th>
+                <th scope="col">email</th>
+                <th scope="col">phone</th>
+{#                <th scope="col">zipCode</th>#}
+{#                <th scope="col">active</th>#}
+{#                <th scope="col">available</th>#}
+            </tr>
+        </thead>
+        <tbody>
+            {% for dis in user %}
+            <tr>
+{#                <td>{{ product.category.name }}</td>#}
+                <td>{{ dis.full_name }}</td>
+                <td>{{ dis.email }}</td>
+                <td>{{ dis.phone_number }}</td>
+
+{#                <td>{{ dis.active }}</td>#}
+{#                <a href="{% url 'home:download_obj_bucket' obj.Key %}">download</a></td>#}
+                <td><a type="button" class="btn btn-warning" href="/accounts/userupdate/{{ dis.id }} ">Update</a>
+                    <a type="button" class="btn btn-danger" href="/accounts/userdelete/{{ dis.id }}">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a type="button" class="btn btn-success" href="{% url 'accounts:usercreate' %}">Create</a>
+</div>
+{% endblock %}
