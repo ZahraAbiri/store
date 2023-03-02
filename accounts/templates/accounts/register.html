@@ -4,31 +4,62 @@
 {% load static %}
 {% block content %}
     <head>
-        <link href="../../static/css/login.css" rel="stylesheet">
-        <script src="../../static/js/script.js"></script>
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <link rel="stylesheet" href="{% static 'css/register.css' %}">
+
+        {#        <link href="../../static/css/login.css" rel="stylesheet">#}
+        {#        <script src="../../static/js/script.js"></script>#}
         <meta charset="UTF-8">
-        <title>Title</title>
+        <title></title>
     </head>
     <body>
-    <div >
+    <div class="wrapper">
+        <div class="inner">
+            <img src="../../static/image/image-1.png" alt="" class="image-1">
+            <form method="post" id="signUp">
+                {% csrf_token %}
+                <h3>New Account?</h3>
+                <div class="form-holder">
 
-        <p class="signup_word">SIGN UP</p>
-        <form method="post" action="" id="signUp">
-             {% csrf_token %}
-            {{ form.as_p }}
-{#            <input type="text" name="phone_number" placeholder="first name" class="f1" maxlength="10" required#}
-{#                   style="margin-top:35px;" autocomplete="off" value="{ form.phone_number }">#}
-{#            <input type="text" name="last_name" placeholder="last name" class="f1" maxlength="10" required#}
-{#                   autocomplete="off">#}
-{#            <input type="text" name="username" placeholder="username" class="f1" maxlength="10" required#}
-{#                   autocomplete="off">#}
-{#            <input type="email" name="email" placeholder="e-mail" class="f1" maxlength="30" required autocomplete="off">#}
-{#            <input type="password" name="password" placeholder="password" class="f1" maxlength="10" required#}
-{#                   autocomplete="off">#}
-            <button class="f1" name="signup" value="clicked">Sign up</button>
-        </form>
+                    <span><i class="bi bi-person" style="margin-left: 100%"></i></span>
+                    {{ form.full_name }}
+                    {#						<input name="full_name" type="text" class="form-control" placeholder="fullname">#}
+                </div>
+                <div class="form-holder">
+                    <span><i style="margin-left: 100%" class="bi bi-telephone-fill"></i></span>
+                    {{ form.phone }}
+                    {#						<input name="phone_number" type="text" class="form-control" placeholder="Phone Number">#}
+                </div>
+                <div class="form-holder">
+                    {{ form.email }}
+                    <span><i style="margin-left: 100%" class="bi bi-mailbox"></i></span>
+                    {#						<input name="email" type="text" class="form-control" placeholder="Mail">#}
+                </div>
+                <div class="form-holder">
+                    {{ form.password }}
+                    <span><i style="margin-left: 100%" class="bi bi-lock-fill"></i></span>
+                    {#						<input name="password" type="password" class="form-control" placeholder="Password">#}
+                </div>
+                {#					            <button  name="signup" value="clicked">Register</button>#}
+                <input type="submit" value="Register" class="btn btn-primary" style="margin-left:35%"/>
+                {#					<button>#}
+                {#						<span>Register</span>#}
+                {#					</button>#}
+            </form>
+            <img src="../../static/image/image-2.png" alt="" class="image-2">
+        </div>
+
     </div>
-    {% endblock %}
-    </body>
+    {#    <div >#}
+    {##}
+    {#        <p class="signup_word">SIGN UP</p>#}
+    {#        <form method="post" action="" id="signUp">#}
+    {#             {% csrf_token %}#}
+    {#            {{ form.as_p }}#}
+    {#            <button class="f1" name="signup" value="clicked">Sign up</button>#}
+    {#        </form>#}
+    {#    </div>#}
+{% endblock %}
+</body>
 
 </html>

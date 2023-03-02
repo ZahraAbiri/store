@@ -1,45 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
-{% extends 'base.html' %}
+{#{% extends 'base.html' %}#}
 {% load static %}
+<link href="{% static 'css/signin.css' %}" rel="stylesheet">
+
 {% block content %}
-    <head>
-        <link href="../../static/css/login.css" rel="stylesheet">
-        <script src="../../static/js/script.js"></script>
-        <meta charset="UTF-8">
-        <title>Title</title>
-    </head>
-    <body>
-{#    <form action="" method="post">#}
-{#        {% csrf_token %}#}
-{#        {{ form.as_p }}#}
-{#        <input type="submit" value="Login">#}
-{#    </form>#}
+<link href="../../static/css/signin.css" rel="stylesheet">
 
-    <div class="container card" id="card">
-        <div class="front">
-            <p class="login_word">LOG IN</p>
-            <img src="../../static/image/male_pic%20(1).png"
-                 alt="person picture">
+    {#        <script src="../../static/js/script.js"></script>#}
+
+    {#    <form action="" method="post">#}
+    {#        {% csrf_token %}#}
+    {#        {{ form.as_p }}#}
+    {#        <input type="submit" value="Login">#}
+    {#    </form>#}
+
+
+    <div class="wrapper fadeInDown">
+        <div id="formContent">
+            <!-- Tabs Titles -->
+            <h2 class="active"> Sign In </h2>
+            <a href="{% url 'accounts:user_register' %}">Sign Up </a>
+
+            <!-- Icon -->
+            <div class="fadeIn first">
+                <img src="{% static 'image/user.jpeg' %}" id="icon" alt="User Icon"/>
+            </div>
+            <br/>
+            <!-- Login Form -->
             <form method="post" action="">
-{#                <label>phone </label>#}
-                    {% csrf_token %}
-                {{ form.as_p }}
-{#                    <input type="text" name="username" placeholder="phonnumber" class="f1"#}
-{#                       value="{{ form.phone_number }}"    maxlength="10" required >#}
-
-{#                {{ form.password }}#}
-{#                <label>password</label>#}
-{#                <input type="password" name="password" placeholder="password" class="f1" maxlength="10" required#}
-{#                       autocomplete="off"   value="{{ form.phone_number }}" >#}
-{#                <input type="submit" class="f1" name="login" value="log in" />#}
-{#                <p>Not registered? <span onclick="flip()">Create an account</span></p>#}
-                 <input type="submit" value="Login" class="f1" name="login" style="background-color: #FFB30E">
+                 {% csrf_token %}
+                {{ form.as_p}}
+{#                {{ form.phone }}#}
+{#                {{ form.password}}#}
+{#                      <input type="text" id="login" class="fadeIn second" name="login" placeholder="login">#}
+{#                      <input type="text" id="password" class="fadeIn third" name="login" placeholder="password">#}
+                <input type="submit" value="Login" class="f1" name="login">
             </form>
-        </div>
 
+            <!-- Remind Passowrd -->
+
+
+        </div>
     </div>
-{#    </form>#}
+
+
+
+
+    {#    <div class="container card" id="card">#}
+    {#        <div class="front">#}
+    {#            <p class="login_word">LOG IN</p>#}
+    {#            <img src="../../static/image/male_pic%20(1).png"#}
+    {#                 alt="person picture">#}
+    {#            <form method="post" action="">#}
+    {#                <label>phone </label>#}
+    {#                    {% csrf_token %}#}
+    {#                {{ form.as_p }}#}
+    {#                    <input type="text" name="username" placeholder="phonnumber" class="f1"#}
+    {#                       value="{{ form.phone_number }}"    maxlength="10" required >#}
+    {##}
+    {#                {{ form.password }}#}
+    {#                <label>password</label>#}
+    {#                <input type="password" name="password" placeholder="password" class="f1" maxlength="10" required#}
+    {#                       autocomplete="off"   value="{{ form.phone_number }}" >#}
+    {#                <input type="submit" class="f1" name="login" value="log in" />#}
+    {#                <p>Not registered? <span onclick="flip()">Create an account</span></p>#}
+    {#                 <input type="submit" value="Login" class="f1" name="login" style="background-color: #FFB30E">#}
+    {#            </form>#}
+    {#        </div>#}
+    {##}
+    {#    </div>#}
+    {#    </form>#}
 {% endblock %}
 </body>
 

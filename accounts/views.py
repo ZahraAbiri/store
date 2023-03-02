@@ -24,7 +24,7 @@ from .serializer import UserSerializer
 class UserRegisterView(View):
     # todo is addmin or just customer
     form_class = UserRegistrationForm
-    template_name = 'accounts/register111.html'
+    template_name = 'accounts/register.html'
 
     def get(self, request):
         form = self.form_class
@@ -118,16 +118,21 @@ class UserLoginView(View):
                 # print('before login'+str(cart.Cart))
 
                 login(request, user)
+                # url=request.get('next')
+                # settp
                 cart = Cart(request)
                 product = get_object_or_404(Product, id=1)
                 form = CartAddForm(request.POST)
                 if form.is_valid():
                     cart.add(product, form.cleaned_data['quantity'])
-
-                # print('after login' + str(request.session.get(CART_SESSION_ID).keys()))
-
                 messages.success(request, 'you logged in successfully', 'info')
-                return redirect('products:products')
+                if str(request.session.get(CART_SESSION_ID))=='{}':
+                    return redirect('products:products')
+
+                else:
+                    return redirect('orders:cart')
+
+
             messages.error(request, 'phone or password is wrong', 'warning')
         return render(request, self.template_name, {'form': form})
 
@@ -135,7 +140,7 @@ class UserLoginView(View):
 def addressList(request):
     id = request.user.id
     print(id)
-    address = Address.objects.raw('SELECT * FROM accounts_address where customer_id="%s"' % id)
+    address = Address.objects.filter(customer_id=id)
     # address = Address.objects.get(Customer_id=id)
     print(address)
     return render(request, "accounts/address-list.html", {'address': address})

@@ -99,7 +99,7 @@ class VerifyCodeForm(forms.Form):
 
 class UserLoginForm(forms.Form):
     phone = forms.CharField(widget=forms.TextInput({'class':'f1','placeholder': 'Enter phone number *'}),label=False)
-    password = forms.CharField(widget=forms.PasswordInput({'class':'f1','placeholder': 'Enter password *'}),label=False,)
+    password = forms.CharField(widget=forms.PasswordInput({'class':'f1','placeholder': 'Enter password *'}),label=False)
 
 class addAddressForm(forms.ModelForm):
     class Meta:
