@@ -1,25 +1,4 @@
-{#<!DOCTYPE html>#}
-{#<html lang="en">#}
-{#<head>#}
-{#    <meta charset="UTF-8">#}
-{#    <title>Title</title>#}
-{#</head>#}
-{#<body>#}
-{#<div class="main">#}
-{##}
-{#    {% for data in dataset %}.#}
-{##}
-{#    {{ data.name }}<br/>#}
-{#    {{ data.price }}<br/>#}
-{#    {{ data.category }}<br/>#}
-{##}
-{#    <hr/>#}
-{##}
-{#    {% endfor %}#}
-{##}
-{#</div>#}
-{#</body>#}
-{#</html>#}
+
 
 {% extends "base.html" %}
 {% block content %}
@@ -53,6 +32,12 @@
             {% endfor %}
         </tbody>
     </table>
-    <a type="button" class="btn btn-success" href="{% url 'accounts:addresscreate' %}">Create</a>
+{% if user.is_customer %}
+        <a type="button" class="btn btn-success" href="{% url 'accounts:cusAdd' %}">Create</a>
+
+    {% else %}
+        <a type="button" class="btn btn-success" href="{% url 'accounts:addresscreate' %}">Create</a>
+
+{% endif %}
 </div>
 {% endblock %}

@@ -21,4 +21,5 @@ urlpatterns = [
     path('userlist/', views.operator_user_List, name='userlist'),
     path('userupdate/<int:id>/', views.update_Operator_user_, name='userupdate'),
     path('userdelete/<int:id>/', views.delete_user_operator, name='userdelete'),
+    path('customer/addAddress', views.customerAddAddress, name='cusAdd'),
 ]

@@ -175,8 +175,10 @@ class loginView(views.APIView):
 
 def addressCreate(request):
     if request.method == "POST":
+          # this is the added line
         form = addAddressForm(request.POST)
         if form.is_valid():
+            print('valid')
             model = form.instance
             form.save(model)
             return redirect('accounts:addressListManagement')
@@ -301,3 +303,18 @@ def delete_user_operator(request, id):
         return redirect("accounts:userlist")
 
     return render(request, "operator/delete_user.html", context)
+
+def customerAddAddress(request):
+    if request.method == "POST":
+        post = request.POST
+        print(str(post))
+        c=post['city_name']
+        a=post['avenue_name']
+        s=post['street_name']
+        p=post['plate']
+        z=post['zipCode']
+        u=request.user.id
+        add=Address(city_name=c,avenue_name=a,street_name=s,plate=p,zipCode=z,customer_id=u)
+        Address.save(add)
+        return redirect("accounts:addresslist")
+    return render(request, "accounts/userAddAddress.html")
